@@ -56,7 +56,7 @@ def digit_to_string(string):
         (str): Written out version of the digit
     """
     # Iterate over the list of characters to update
-    for og_char, new_char in DIGIT_TO_STR_DICT.iteritems():
+    for og_char, new_char in DIGIT_TO_STR_DICT.items():
         string = string.replace(og_char, new_char)
     return string
 
@@ -192,7 +192,7 @@ class TwineToRenpy:
         new_name = ''
         for char_index, char in enumerate(name):
             # Check if the first character is a number
-            if char_index is 1:
+            if char_index == 1:
                 # If so, either change the digit to a string
                 #  or add a string in front of the label
                 if char.isdigit():
@@ -275,7 +275,7 @@ class TwineToRenpy:
                 passage_list.append(passage)
 
                 # Convert passage from ascii to unicode
-                unicode_passage = passage.string.encode('utf-8')
+                unicode_passage = passage.string.encode('utf-8').decode()
 
                 # Get list of characters if asked to generate
                 if self.get_config_value('char_def'):
@@ -304,7 +304,7 @@ class TwineToRenpy:
                             # Split out the variable name and the value
                             variable_name, variable_value = set_passage_statement.split(' to ')
                             # Replace Twine boolean phrase with the Ren'Py/Python accepted one
-                            for boolean_phrase, boolean_replace in boolean_replace_dict.iteritems():
+                            for boolean_phrase, boolean_replace in boolean_replace_dict.items():
                                 if boolean_phrase in set_passage_statement:
                                     variable_value = set_passage_statement.replace(boolean_phrase,
                                                                                    boolean_replace)
@@ -334,7 +334,7 @@ class TwineToRenpy:
 
         # Generate a string of variable definitions to attach after characters but before the script
         var_def_str = ''
-        for variable_name, variable_value in raw_variables_dict.iteritems():
+        for variable_name, variable_value in raw_variables_dict.items():
             var_def_str += 'default {} = {}\n'.format(variable_name, variable_value)
 
         # Add variable defs to the document passage if desired
@@ -445,9 +445,9 @@ class TwineToRenpy:
                                 passage_index_with_whitespace.append(i)
                                 current_group_index += 1
                 twine_menu_indeces = list(set(passage_index_with_whitespace))
-                for choice_index, choice_list in twine_menu_indeces_groupings_dict.iteritems():
+                for choice_index, choice_list in twine_menu_indeces_groupings_dict.items():
                     final_menu_groupings_dict[choice_index] = list(set(choice_list))
-                for choice_index, choice_list in final_menu_groupings_dict.iteritems():
+                for choice_index, choice_list in final_menu_groupings_dict.items():
                     # Based on the choice index groups, we will assign whether the choices are
                     #  first, middle, or end of a group. Or whether they are standalone choices.
                     for i, choice_split_index in enumerate(choice_list):
@@ -552,7 +552,7 @@ class TwineToRenpy:
                     # Replace the "to" inside the statement only
                     set_passage_statement = '$ ' + set_passage_statement.replace(' to ', ' = ')
                     # Replace Twine boolean phrase with the Ren'Py/Python accepted one
-                    for boolean_phrase, boolean_replace in boolean_replace_dict.iteritems():
+                    for boolean_phrase, boolean_replace in boolean_replace_dict.items():
                         if boolean_phrase in set_passage_statement:
                             set_passage_statement = set_passage_statement.replace(boolean_phrase, boolean_replace)
                     set_passage += set_passage_statement + set_passage_end
@@ -582,7 +582,7 @@ class TwineToRenpy:
                         if_result = ''
                         if len(if_phrase_split) > 1:
                             if_result = if_phrase_split[1]
-                        for comparison_phrase, comparison_replace in comparison_phrase_dict.iteritems():
+                        for comparison_phrase, comparison_replace in comparison_phrase_dict.items():
                             if comparison_phrase in if_phrase:
                                 # No break because we could have multiple types of comparison
                                 if_phrase = if_phrase.replace(comparison_phrase, comparison_replace)
@@ -596,7 +596,7 @@ class TwineToRenpy:
                         # Retain original formatting to make it easier to find these
                         if_passage += '<<{}>>{}'.format(if_phrase, if_result)
                 if_passage = if_passage.replace('<</if>>', '')
-                for if_phrase, if_replace in if_phrase_dict.iteritems():
+                for if_phrase, if_replace in if_phrase_dict.items():
                     if_passage = if_passage.replace(if_phrase, if_replace)
             else:
                 # If we don't, just pass the previous passage along
@@ -654,7 +654,7 @@ class TwineToRenpy:
             # Iterate over the list of terms to update
             # Generally we're replacing all the non-recognized characters with safe for Ren'Py ones
             for dict_pair in self.char_replace_list:
-                for og_char, new_char in dict_pair.iteritems():
+                for og_char, new_char in dict_pair.items():
                     clean_passage = clean_passage.replace(og_char.encode('utf-8'), new_char.encode('utf-8'))
 
             # The passage label is the passage name since this is used in the jump text

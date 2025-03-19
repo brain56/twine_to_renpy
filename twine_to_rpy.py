@@ -3,7 +3,8 @@
 
 import os
 import sys
-from PyQt4.QtGui import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 from twine_to_rpy_model import TwineToRenpy
 
 
@@ -196,7 +197,7 @@ class TwineToRenpyView(QWidget):
 
         # Create the term replace UI
         for i, char_dict in enumerate(self.model.custom_char_replace_list):
-            for og_char, new_char in char_dict.iteritems():
+            for og_char, new_char in char_dict.items():
                 # Create widgets
                 og_char_le = QLineEdit(og_char, self)
                 new_char_le = QLineEdit(new_char, self)
@@ -289,7 +290,7 @@ class TwineToRenpyView(QWidget):
         """
         filepath = QFileDialog().getOpenFileName(self, 'Select file', '/', 'HTML files (*.html)')
         if filepath:
-            lineedit.setText(filepath)
+            lineedit.setText(filepath[0])
 
     def get_dir(self, lineedit):
         """
@@ -545,7 +546,7 @@ class TwineToRenpyView(QWidget):
 
         # Remake the replace terms UI
         for i, char_dict in enumerate(self.model.custom_char_replace_list):
-            for og_char, new_char in char_dict.iteritems():
+            for og_char, new_char in char_dict.items():
                 # Create widgets
                 og_char_le = QLineEdit(og_char, self)
                 new_char_le = QLineEdit(new_char, self)
@@ -632,9 +633,11 @@ class TwineToRenpyView(QWidget):
         """
         Make UI connections
         """
+        
         # Filepaths
         self.html_path_btn.clicked.connect(lambda: self.get_path(self.html_path_le))
         self.script_dir_btn.clicked.connect(lambda: self.get_dir(self.script_dir_le))
+
         # Text *changed* instead of edited for the below since the file dialogs will update the lineedit
         #  But in addition this will also account for edits
         self.html_path_le.textChanged.connect(lambda: self.update_le_model_data('html_path', self.html_path_le))
