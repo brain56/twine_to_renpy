@@ -245,7 +245,7 @@ class TwineToRenpy:
         self.write_config()
 
         # Open the HTML file as a soup
-        with open(self.data['html_path'], 'r') as html_file:
+        with open(self.data['html_path'], 'r', encoding="utf-8") as html_file:
             soup = BeautifulSoup(html_file, 'html.parser')
 
         # Get the list of passages
@@ -395,7 +395,7 @@ class TwineToRenpy:
                         else:
                             quotes_passage += '{}\n'.format(passage_split)
             else:
-                quotes_passage = unicode_passage
+                quotes_passage = unicode_passage.decode('utf-8')
 
             # Convert the twine [[next passage]] to rpy jump statements
             # Start by splitting the file using [[
@@ -478,8 +478,15 @@ class TwineToRenpy:
                             if len(passage_section_split) > 1:
                                 passage_rest = passage_section_split[1]
                             choice_text = jump_statement
-                            if len(jump_statement.split('|')) > 1:
-                                choice_text, jump_statement = jump_statement.split('|')
+							
+                            splitLength = len(jump_statement.split('|'))
+                            
+                            if splitLength > 1:
+                                if splitLength == 2:
+                                    choice_text, jump_statement = jump_statement.split('|')
+                                else:
+                               		print("Unable to properly split \"" + jump_statement + "\".")
+									
                             # Strip the quotes if it has any since we'll be adding these anyway
                             choice_text = strip_quotes(choice_text)
 
@@ -517,8 +524,15 @@ class TwineToRenpy:
                         else:
                             passage_rest = ''
                         choice_text = jump_statement
-                        if len(jump_statement.split('|')) > 1:
-                            choice_text, jump_statement = jump_statement.split('|')
+						
+                        splitLength = len(jump_statement.split('|'))
+						
+                        if splitLength > 1:
+                            if splitLength == 2:
+                                choice_text, jump_statement = jump_statement.split('|')
+                            else:
+                                print("Unable to properly split \"" + jump_statement + "\".")
+
                         # Strip the quotes if it has any since we'll be adding these anyway
                         choice_text = strip_quotes(choice_text)
 
@@ -655,7 +669,7 @@ class TwineToRenpy:
             # Generally we're replacing all the non-recognized characters with safe for Ren'Py ones
             for dict_pair in self.char_replace_list:
                 for og_char, new_char in dict_pair.items():
-                    clean_passage = clean_passage.replace(og_char.encode('utf-8'), new_char.encode('utf-8'))
+                    clean_passage = clean_passage.replace(og_char, new_char)
 
             # The passage label is the passage name since this is used in the jump text
             passage_text = 'label {}:\n    {}\n\n'.format(passage_name, clean_passage)
