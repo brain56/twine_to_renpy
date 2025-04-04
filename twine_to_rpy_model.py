@@ -301,8 +301,13 @@ class TwineToRenpy:
                             set_passage_split_list = set_passage_split.split('>>', 1)
                             # This is our set statement
                             set_passage_statement = set_passage_split_list[0]
+                            
                             # Split out the variable name and the value
-                            variable_name, variable_value = set_passage_statement.split(' to ')
+                            if set_passage_statement.__contains__('='):
+                                variable_name, variable_value = set_passage_statement.split('=')
+                            else:
+                                variable_name, variable_value = set_passage_statement.split(' to ')
+
                             # Replace Twine boolean phrase with the Ren'Py/Python accepted one
                             for boolean_phrase, boolean_replace in boolean_replace_dict.items():
                                 if boolean_phrase in set_passage_statement:
